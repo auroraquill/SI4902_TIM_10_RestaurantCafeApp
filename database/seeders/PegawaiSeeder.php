@@ -21,6 +21,7 @@ class PegawaiSeeder extends Seeder
             ['id' => 5, 'nama' => 'Moja',    'jabatan' => 'Chef',   'kontak' => '08673289967'],
             ['id' => 8, 'nama' => 'Daaniys', 'jabatan' => 'Chef',   'kontak' => '082145667899'],
             ['id' => 9, 'nama' => 'Villa',   'jabatan' => 'Waiter', 'kontak' => '08976589556'],
+            
         ]);
     }
 }

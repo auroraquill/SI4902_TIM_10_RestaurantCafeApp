@@ -27,9 +27,6 @@ class DatabaseSeeder extends Seeder
             5 => 'moja@resto.test',
             8 => 'daaniys@resto.test',
             9 => 'villa@resto.test',
-            10 => 'firsya@resto.test',
-            11 => 'aika@resto.test',
-            12 => 'aqui@resto.test',
         ];
 
         foreach ($akunPegawai as $id => $email) {
