@@ -235,3 +235,31 @@ form.inline { display: inline; margin: 0; }
 .modal-box button { padding: 8px 18px; border: none; border-radius: 6px; cursor: pointer; }
 .btn-batal { background: #ddd; }
 .btn-yakin { background: #c0392b; color: #fff; }
+
+/* Tombol logout di pojok kanan bawah card */
+.logout-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btn-logout {
+  background: #9b1c4a;
+  color: #fff;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-logout:hover { background: #7d163b; }
+
+/* Logout di halaman profil pegawai */
+.profil-logout { margin-top: 18px; }
+
+/* Popup sukses tambah pegawai */
+.modal-actions { margin-top: 18px; display: flex; justify-content: center; }
+.modal-box h3 { color: #043863; margin-top: 0; }
+.btn-ok { background: #043863; color: #fff; }
+.btn-ok:hover { background: #0a4f8f; }

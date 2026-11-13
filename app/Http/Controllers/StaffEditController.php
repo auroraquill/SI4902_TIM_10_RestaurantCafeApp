@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Staff;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class StaffEditController
@@ -21,6 +22,9 @@ class StaffEditController
         ]);
 
         $staff->update($data);
+
+        // nama di akun login ikut disamakan
+        User::where('pegawai_id', $staff->id)->update(['name' => $data['nama']]);
         return redirect()->route('staff.index');
     }
 }

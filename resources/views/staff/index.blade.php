@@ -44,6 +44,13 @@
         @endforeach
       </tbody>
     </table>
+
+    <div class="logout-wrap">
+      <form action="{{ route('logout') }}" method="post">
+        @csrf
+        <button type="submit" class="btn-logout">LOGOUT</button>
+      </form>
+    </div>
   </div>
 
   <div class="modal-overlay" id="modalHapus">
