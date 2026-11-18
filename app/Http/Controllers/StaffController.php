@@ -7,11 +7,11 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
-class StaffController
+class StaffController extends Controller
 {
     public function index()
     {
-        $pegawai = Staff::orderBy('id')->get();
+        $pegawai = Staff::orderBy('id', 'desc')->get();
         return view('staff.index', compact('pegawai'));
     }
 
@@ -31,7 +31,7 @@ class StaffController
     {
         $data = $request->validate([
             'nama'     => 'required|string|max:100',
-            'jabatan'  => 'required|in:Chef,Waiter,Kasir',
+            'jabatan'  => 'required|string|max:50',
             'kontak'   => 'required|string|max:20',
             'email'    => 'nullable|email|unique:users,email',
             'password' => 'nullable|required_with:email|min:6',
@@ -45,27 +45,29 @@ class StaffController
             ]);
 
             // Kalau email diisi, sekalian bikin akun login role pegawai
-            if (! empty($data['email'])) {
+            if (!empty($data['email'])) {
                 User::create([
                     'name'       => $data['nama'],
                     'email'      => $data['email'],
-                    'password'   => $data['password'],
+                    'password'   => bcrypt($data['password']),
                     'role'       => 'pegawai',
                     'pegawai_id' => $staff->id,
                 ]);
             }
         });
 
-        // Tetap di form, popup sukses ditampilkan lewat flash message
-        return redirect()->route('staff.create')
+        // Diarahkan langsung ke index agar data terlihat di tabel
+        return redirect()->route('staff.index')
             ->with('success', 'Pegawai ' . $data['nama'] . ' berhasil ditambahkan.');
     }
 
     public function destroy(Staff $staff)
     {
-        // akun login pegawai ikut dihapus
+        // Akun login pegawai ikut dihapus
         User::where('pegawai_id', $staff->id)->delete();
         $staff->delete();
-        return redirect()->route('staff.index');
+        
+        return redirect()->route('staff.index')
+            ->with('success', 'Data pegawai berhasil dihapus.');
     }
 }

@@ -12,7 +12,7 @@ class AuthController
         return view('auth.login');
     }
 
-    public function login(Request $request)
+   public function login(Request $request)
     {
         $credentials = $request->validate([
             'email'    => 'required|email',
@@ -25,9 +25,8 @@ class AuthController
 
         $request->session()->regenerate();
 
-        return Auth::user()->isAdmin()
-            ? redirect()->route('staff.index')
-            : redirect()->route('staff.profil');
+        // SEMUA user (Admin & Pegawai) diarahkan ke Dashboard Utama
+        return redirect()->route('dashboard');
     }
 
     public function logout(Request $request)
