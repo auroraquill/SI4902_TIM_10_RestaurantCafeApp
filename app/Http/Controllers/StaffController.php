@@ -9,10 +9,22 @@ use Illuminate\Http\Request;
 
 class StaffController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pegawai = Staff::orderBy('id', 'desc')->get();
-        return view('staff.index', compact('pegawai'));
+        $search = trim((string) $request->input('search'));
+
+        $pegawai = Staff::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama', 'like', "%{$search}%")
+                      ->orWhere('jabatan', 'like', "%{$search}%")
+                      ->orWhere('kontak', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('id', 'asc')
+            ->get();
+
+        return view('staff.index', compact('pegawai', 'search'));
     }
 
     // Hak akses Pegawai: hanya lihat profil sendiri
@@ -66,7 +78,7 @@ class StaffController extends Controller
         // Akun login pegawai ikut dihapus
         User::where('pegawai_id', $staff->id)->delete();
         $staff->delete();
-        
+
         return redirect()->route('staff.index')
             ->with('success', 'Data pegawai berhasil dihapus.');
     }

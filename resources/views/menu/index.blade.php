@@ -33,12 +33,6 @@
                 <a href="{{ route('menu.create') }}" class="btn-tambah">+ Tambah Menu Baru</a>
             </div>
 
-            @if(session('success'))
-                <div class="alert-success" style="margin-top: 15px; padding: 10px 15px; background: #d1fae5; color: #065f46; border-radius: 6px;">
-                    {{ session('success') }}
-                </div>
-            @endif
-
             <!-- Grid Menu Langsung Berjejer Rapi -->
             <div class="menu-grid-container" style="margin-top: 20px;">
                 @isset($menus)
@@ -59,7 +53,7 @@
 
                         <div class="menu-actions" style="display: flex; gap: 8px; align-items: center;">
                             <a href="{{ route('menu.edit', $menu) }}" class="aksi edit" style="flex: 1; text-align: center; padding: 6px; background: #f59e0b; color: white; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: 600;">EDIT</a>
-                            <form action="{{ route('menu.destroy', $menu) }}" method="POST" onsubmit="return confirm('Yakin hapus menu ini?')" style="flex: 1; margin: 0;">
+                            <form action="{{ route('menu.destroy', $menu) }}" method="POST" data-confirm="Yakin hapus menu ini?" style="flex: 1; margin: 0;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="aksi hapus" style="width: 100%; padding: 6px; background: #ef4444; color: white; border: none; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer;">HAPUS</button>
@@ -81,5 +75,6 @@
         </div>
     </div>
 
+    @include('partials.popup')
 </body>
 </html>

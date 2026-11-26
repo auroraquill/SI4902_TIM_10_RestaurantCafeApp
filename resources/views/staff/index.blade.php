@@ -4,89 +4,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Staff - Sistem Restoran</title>
-    <!-- Memanggil CSS Terpusat -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-
-    <!-- Navbar Atas Konsisten -->
-    <div class="navbar">
-        <h2>Sistem Restoran</h2>
-        <div class="user-info">
-            <span style="font-weight: 600; color: #4f46e5;">Restaurant & Cafe</span>
-            <img src="{{ asset('images/logo.png') }}" alt="Logo TRES" class="logo" style="max-height: 40px; width: auto;">
+<body class="bg-gray-100 min-h-screen">
+    {{-- Header --}}
+    <header class="bg-white shadow-sm px-8 py-4 flex items-center justify-between">
+        <a href="{{ route('dashboard') }}" class="text-xl font-bold text-indigo-600">
+            Sistem Restoran
+        </a>
+        <div class="text-sm text-indigo-600 font-medium">
+            Restaurant &amp; Cafe
         </div>
-    </div>
+    </header>
 
-    <!-- Konten Utama -->
-    <div class="container menu-page-container">
-        
-        <!-- Tombol Kembali ke Dashboard -->
-        <div class="back-nav-wrap" style="margin-bottom: 20px;">
-            <a href="{{ route('dashboard') }}" class="btn">&larr; Kembali ke Dashboard</a>
+    <main class="max-w-6xl mx-auto px-6 py-8">
+        {{-- Tombol Kembali --}}
+        <div class="mb-5">
+            <a href="{{ route('dashboard') }}"
+               class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition">
+                &larr; Kembali ke Dashboard
+            </a>
         </div>
 
-        <div class="card" style="padding: 30px;">
-            <div class="card-head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        {{-- Card Utama --}}
+        <div class="bg-white rounded-xl shadow-sm p-6 md:p-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div>
-                    <h2>Data Pegawai</h2>
-                    <p class="card-subtitle" style="margin: 0; color: #6b7280; font-size: 14px;">Kelola informasi akun pegawai dan jabatan restoran.</p>
+                    <h1 class="text-2xl font-bold text-gray-800">Data Pegawai</h1>
+                    <p class="text-sm text-gray-500 mt-1">Kelola informasi akun pegawai dan jabatan restoran.</p>
                 </div>
-                <a href="{{ route('staff.create') }}" class="btn-tambah" style="background: #059669; color: white; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px;">+ Tambah Baru</a>
+
+                <a href="{{ route('staff.create') }}"
+                   class="inline-flex items-center justify-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-md shadow-sm transition">
+                    + Tambah Baru
+                </a>
             </div>
 
-            @if(session('success'))
-                <div style="background: #d1fae5; color: #065f46; padding: 12px 15px; border-radius: 6px; font-size: 14px; margin-bottom: 20px;">
-                    {{ session('success') }}
-                </div>
-            @endif
+            {{-- Form Search --}}
+            <form action="{{ route('staff.index') }}" method="GET" class="flex flex-wrap items-center gap-2 mb-6">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Cari nama, jabatan, atau nomor kontak..."
+                    class="w-full sm:w-80 border border-gray-300 rounded-md px-3.5 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                <button
+                    type="submit"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition">
+                    Cari
+                </button>
+                @if(request('search'))
+                    <a href="{{ route('staff.index') }}"
+                       class="px-3.5 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium rounded-md transition">
+                        Reset
+                    </a>
+                @endif
+            </form>
 
-            <!-- Tabel Data Pegawai -->
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+            {{-- Tabel Data Pegawai --}}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr style="border-bottom: 2px solid #e5e7eb; color: #374151;">
-                            <th style="padding: 12px 10px;">NO.</th>
-                            <th style="padding: 12px 10px;">NAMA PEGAWAI</th>
-                            <th style="padding: 12px 10px;">JABATAN</th>
-                            <th style="padding: 12px 10px;">NOMOR KONTAK</th>
-                            <th style="padding: 12px 10px; text-align: center;">ACTION</th>
+                        <tr class="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <th class="py-3.5 px-4">NO.</th>
+                            <th class="py-3.5 px-4">NAMA PEGAWAI</th>
+                            <th class="py-3.5 px-4">JABATAN</th>
+                            <th class="py-3.5 px-4">NOMOR KONTAK</th>
+                            <th class="py-3.5 px-4 text-center">ACTION</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @forelse($pegawai as $index => $p)
-                        <tr style="border-bottom: 1px solid #f3f4f6;">
-                            <td style="padding: 12px 10px; color: #6b7280;">{{ $index + 1 }}</td>
-                            <td style="padding: 12px 10px; font-weight: 600; color: #1f2937;">{{ $p->nama }}</td>
-                            <td style="padding: 12px 10px; color: #4b5563;">{{ $p->jabatan }}</td>
-                            <td style="padding: 12px 10px; color: #4b5563;">{{ $p->kontak }}</td>
-                            <td style="padding: 12px 10px; text-align: center;">
-                                <div style="display: flex; justify-content: center; gap: 6px; align-items: center;">
-                                    <!-- Tombol Edit -->
-                                    <a href="{{ route('staff.edit', $p->id) }}" style="background: #f59e0b; color: white; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-decoration: none;">EDIT</a>
-                                    
-                                    <!-- Tombol Hapus -->
-                                    <form action="{{ route('staff.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pegawai ini?')" style="display: inline-block; margin: 0;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer;">HAPUS</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
+                    <tbody class="divide-y divide-gray-200 text-sm text-gray-700">
+                        @forelse($pegawai as $item)
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="py-4 px-4 text-gray-500">{{ $loop->iteration }}</td>
+                                <td class="py-4 px-4 font-semibold text-gray-900">{{ $item->nama }}</td>
+                                <td class="py-4 px-4 text-gray-600">{{ $item->jabatan }}</td>
+                                <td class="py-4 px-4 text-gray-600">{{ $item->kontak }}</td>
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <a href="{{ route('staff.edit', $item->id) }}"
+                                           class="px-3.5 py-1.5 bg-amber-400 hover:bg-amber-500 text-white text-xs font-bold uppercase rounded transition">
+                                            EDIT
+                                        </a>
+
+                                        <form action="{{ route('staff.destroy', $item->id) }}"
+                                              method="POST"
+                                              data-confirm="Yakin ingin menghapus data pegawai {{ $item->nama }}?">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                    class="px-3.5 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold uppercase rounded transition">
+                                                HAPUS
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td colspan="5" style="text-align: center; color: #6b7280; padding: 40px;">
-                                Belum ada data pegawai.
-                            </td>
-                        </tr>
+                            <tr>
+                                <td colspan="5" class="py-8 px-4 text-center text-gray-500">
+                                    @if(request('search'))
+                                        Data pegawai dengan kata kunci "<strong>{{ request('search') }}</strong>" tidak ditemukan.
+                                    @else
+                                        Belum ada data pegawai.
+                                    @endif
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-
         </div>
-    </div>
+    </main>
 
+    @include('partials.popup')
 </body>
 </html>

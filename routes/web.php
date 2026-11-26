@@ -8,14 +8,14 @@ use App\Http\Controllers\MejaController;
 use Illuminate\Support\Facades\Route;
 
 // ==========================================
-// 1. RUTE MODUL RESTORAN (Menu & Meja)
+// 0. RUTE PUBLIK (Pengunjung, tanpa login)
 // ==========================================
-Route::resource('meja', MejaController::class);
-Route::resource('menu', MenuController::class);
+Route::get('/katalog', [MenuController::class, 'katalog'])->name('menu.katalog');
+Route::redirect('/', '/katalog');
 
 
 // ==========================================
-// 2. RUTE AUTENTIKASI (Belum Login)
+// 1. RUTE AUTENTIKASI (Belum Login)
 // ==========================================
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -24,24 +24,28 @@ Route::middleware('guest')->group(function () {
 
 
 // ==========================================
-// 3. RUTE SETELAH LOGIN (Admin & Pegawai)
+// 2. RUTE SETELAH LOGIN (Admin & Pegawai)
 // ==========================================
 Route::middleware('auth')->group(function () {
     // Proses Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // SEMUA user (Admin & Pegawai) diarahkan ke Dashboard Utama dulu saat masuk
-    Route::get('/', function () {
+    Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
     // Halaman Profil Pegawai (bisa diakses via link/tombol)
     Route::get('/profil', [StaffController::class, 'profil'])->name('staff.profil');
+
+    // Menu & Meja: CRUD penuh untuk Admin & Pegawai
+    Route::resource('menu', MenuController::class);
+    Route::resource('meja', MejaController::class);
 });
 
 
 // ==========================================
-// 4. RUTE KHUSUS ADMIN (CRUD Penuh Staff/Pegawai)
+// 3. RUTE KHUSUS ADMIN (CRUD Penuh Staff/Pegawai)
 // ==========================================
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');

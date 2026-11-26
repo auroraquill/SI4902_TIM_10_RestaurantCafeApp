@@ -35,12 +35,6 @@
                 </div>
             </div>
 
-            @if(session('success'))
-                <div class="alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
-
             <table>
                 <thead>
                     <tr>
@@ -66,7 +60,7 @@
                             <td>
                                 <div class="aksi-wrap">
                                     <a href="{{ route('meja.edit', $meja) }}" class="aksi edit">EDIT</a>
-                                    <form action="{{ route('meja.destroy', $meja) }}" method="POST" onsubmit="return confirm('Yakin hapus meja ini?')" style="display:inline-block; margin:0; padding:0; background:none; border:none; box-shadow:none;">
+                                    <form action="{{ route('meja.destroy', $meja) }}" method="POST" data-confirm="Yakin hapus meja ini?" style="display:inline-block; margin:0; padding:0; background:none; border:none; box-shadow:none;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="aksi hapus">HAPUS</button>
@@ -90,5 +84,6 @@
         </div>
     </div>
 
+    @include('partials.popup')
 </body>
 </html>

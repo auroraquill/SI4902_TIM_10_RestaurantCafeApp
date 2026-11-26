@@ -15,6 +15,13 @@ class MenuController extends Controller
         return view('menu.index', compact('menus'));
     }
 
+    // Katalog publik (tanpa login, hanya lihat)
+    public function katalog()
+    {
+        $menus = Menu::orderByDesc('id')->get();
+        return view('menu.katalog', compact('menus'));
+    }
+
     // Form tambah
     public function create()
     {
